@@ -32,7 +32,7 @@ void handleRoot() {
   if (tflI2C.getData(tfDist, tfAddr)) {
     html += "<h2>TF-Luna</h2>";
     html += "<p><b>Distancia:</b> " + String(tfDist) + " cm</p>";
-    html += "<p><b>Distancia:</b> " + String(tfDist / 2.54, 1) + " in</p>";
+    //html += "<p><b>Distancia:</b> " + String(tfDist / 2.54, 1) + " in</p>";
   } else {
     html += "<h2>TF-Luna</h2><p>Error leyendo</p>";
   }
@@ -57,15 +57,15 @@ void setup() {
   Serial.println("Inicializando MPU6050...");
   mpu.initialize();
   if (mpu.testConnection()) {
-    Serial.println("✅ MPU6050 conectado correctamente");
+    Serial.println("MPU6050 conectado correctamente");
   } else {
-    Serial.println("❌ Error: no se detecta el MPU6050");
+    Serial.println("Error: no se detecta el MPU6050");
   }
 
   // --- Configurar Access Point ---
   Serial.println("Creando Access Point...");
   WiFi.softAP(apSSID, apPassword);
-  Serial.print("✅ Conéctate a la red: ");
+  Serial.print("Conéctate a la red: ");
   Serial.println(apSSID);
   Serial.print("Clave: ");
   Serial.println(apPassword);
@@ -81,5 +81,14 @@ void setup() {
 
 void loop() {
   server.handleClient();
+  mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+  tflI2C.getData(tfDist, tfAddr);
+  Serial.print(ax);
+  Serial.print("; ");
+  Serial.print(ay);
+  Serial.print("; ");
+  Serial.print(az);
+  Serial.print("; ");
+  Serial.print(tfDist);
 }
 
